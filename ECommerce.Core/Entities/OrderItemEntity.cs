@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Entities
 {
-    public class OrderItemEntity
+   /* public class OrderItemEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,5 +17,5 @@ namespace ECommerce.Core.Entities
         public int Quantity { get; set; } = 0;
         public decimal UnitPrice { get; set; } = 0;
         public decimal TotalPrice => Quantity * UnitPrice;
-    }
+    }*/
 }

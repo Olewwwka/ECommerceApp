@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Entities
 {
-    public class ReviewEntity
+    /*public class ReviewEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,5 +14,5 @@ namespace ECommerce.Core.Entities
         public ProductEntity Product { get; set; }
         public int Rating { get; set; } = 0;
         public string Comment { get; set; } = string.Empty;
-    }
+    }*/
 }

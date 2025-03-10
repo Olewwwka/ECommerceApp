@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Entities
 {
-    public class ProductEntity
+    /*public class ProductEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,5 +14,5 @@ namespace ECommerce.Core.Entities
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; } = 0;
         public int StockQuantity { get; set; } = 0; 
-    }
+    }*/
 }

@@ -4,7 +4,7 @@ using ECommerce.Core.Entities;
 
 namespace ECommerce.Core.Entities
 {
-    public class AuditLogsEntity
+   /* public class AuditLogsEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -13,6 +13,6 @@ namespace ECommerce.Core.Entities
         public int UserId { get; set; }
         public UserEntity User { get; set; }
         public DateTime LogTime { get; set; }
-    }
+    }*/
 }
 

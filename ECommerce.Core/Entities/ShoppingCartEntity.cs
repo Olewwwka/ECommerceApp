@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Entities
 {
-    public class ShoppingCartEntity
+    /*public class ShoppingCartEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -11,5 +11,5 @@ namespace ECommerce.Core.Entities
         public int UserId { get; set; }
         public UserEntity User { get; set; }
         public List<ProductEntity> Products { get; set; } = [];
-    }
+    }*/
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Entities
 {
-    public class OrderEntity
+    /*public class OrderEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,5 +20,5 @@ namespace ECommerce.Core.Entities
         Shipped,     
         Delivered, 
         Cancelled  
-    }
+    }*/
 }
