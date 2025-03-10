@@ -1,15 +1,38 @@
+using ECommerce.Application.Services;
+using ECommerce.Core.Abstractions.RepostoriesInterfaces;
+using ECommerce.Core.Abstractions.ServicesInterfaces;
+using ECommerce.Infrastructure.Identity.Services;
+using ECommerce.Infrastructure.Persistence.Configuration;
+using ECommerce.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions));
+
+services.AddDbContext<ECommerceDbContext>(options =>
+{
+    options.UseNpgsql(configuration.GetConnectionString(nameof(ECommerceDbContext)));
+});
+
+services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+services.AddScoped<UserService>();
+
+services.AddScoped<IJwtProvider, JwtProvider>();
+services.AddScoped<IPasswordHasher, PasswordHasher>();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
