@@ -15,13 +15,13 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
 
         public async Task AddAsync(UserEntity user)
         {
-            var shoppingCart = new ShoppingCartEntity
+           /* var shoppingCart = new ShoppingCartEntity
             {
                 User = user,
                 Products = new List<ProductEntity>()
             };
 
-            await _context.ShoppingCarts.AddAsync(shoppingCart);
+            await _context.ShoppingCarts.AddAsync(shoppingCart);*/
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }

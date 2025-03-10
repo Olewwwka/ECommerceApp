@@ -15,7 +15,15 @@ namespace ECommerce.Infrastructure.Caching
 
         public RefreshTokenRepository(IConfiguration configuration)
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"]);
+            var redisConfig = configuration.GetSection("Redis");
+            var host = redisConfig["Host"];
+            var port = redisConfig["Port"];
+            var password = redisConfig["Password"];
+
+            var options = ConfigurationOptions.Parse($"{host}:{port}");
+            options.Password = password;
+
+            var redis = ConnectionMultiplexer.Connect(options);
             _cache = redis.GetDatabase();
         }
 

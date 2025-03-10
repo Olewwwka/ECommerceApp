@@ -9,13 +9,13 @@ namespace ECommerce.Infrastructure.Persistence.Configuration
     {
         private readonly IConfiguration _configuration;
         public DbSet<UserEntity> Users { get; set; }
-        public DbSet<CategoryEntity> Categories { get; set; }
+       /* public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<OrderItemEntity> OrderItems { get; set; }
         public DbSet<ReviewEntity> Reviews { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ShoppingCartEntity> ShoppingCarts { get; set; }
-        public DbSet<AuditLogsEntity> AuditLogs { get; set; }
+        public DbSet<AuditLogsEntity> AuditLogs { get; set; }*/
         public ECommerceDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -27,7 +27,7 @@ namespace ECommerce.Infrastructure.Persistence.Configuration
             {
                 userBuilder.ToTable("Users").HasKey(x => x.UserId);
 
-                userBuilder.HasMany<OrderEntity>()
+                /*userBuilder.HasMany<OrderEntity>()
                     .WithOne()
                     .HasForeignKey(x => x.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
@@ -45,10 +45,10 @@ namespace ECommerce.Infrastructure.Persistence.Configuration
                 userBuilder.HasOne(user => user.ShoppingCart)
                     .WithOne(cart => cart.User)
                     .HasForeignKey<ShoppingCartEntity>(cart => cart.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Cascade);*/
             });
 
-            modelBuilder.Entity<ShoppingCartEntity>(cartBuilder =>
+            /*modelBuilder.Entity<ShoppingCartEntity>(cartBuilder =>
             {
                 cartBuilder.ToTable("ShoppingCarts").HasKey(sc => sc.CartId);
 
@@ -85,7 +85,7 @@ namespace ECommerce.Infrastructure.Persistence.Configuration
                              .WithMany()
                              .HasForeignKey(r => r.UserId)
                              .OnDelete(DeleteBehavior.Cascade);
-            });
+            });*/
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
