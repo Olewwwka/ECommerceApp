@@ -10,8 +10,15 @@ namespace ECommerce.API.Endpoints
             app.MapPost("register", Register);
             app.MapPost("login", Login);
             app.MapGet("getall", GetAllUsers);
+            app.MapPost("/refres-token", RefreshToken);
             return app;
         }
+
+        public async Task<IResult> RefreshToken(string refreshToken, )
+        {
+                
+        }
+
 
         public static async Task<IResult> Register(RegisterUserRequest request,
             UserService userService)

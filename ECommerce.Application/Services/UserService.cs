@@ -40,12 +40,11 @@ namespace ECommerce.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<(string jwtToken, string refreshToken)> Login(string email, string password)
         {
             var userEntity = await _unitOfWork.UsersRepository.GetByEmailAsync(email);
 
             var user = _mapper.Map<User>(userEntity);
-
             var result = _passwordHasher.Verify(password, user.PasswordHash);
 
             if (result == false)
@@ -53,8 +52,10 @@ namespace ECommerce.Application.Services
                 throw new Exception("wrongpassword");
             }
             var token = _jwtProvider.GenerateToken(user);
+            var refreshToken = _jwtProvider.GenerateRefreshToken();
+            await _unitOfWork.RefreshTokenRepository.SetRefreshTokenAsync(userEntity.UserId, refreshToken, TimeSpan.FromHours(2));
 
-            return token;
+            return (token, refreshToken);
         }
 
         public async Task<List<User>> GetAllUsers()
@@ -64,6 +65,11 @@ namespace ECommerce.Application.Services
             var users = _mapper.Map<List<User>>(userEntities);
 
             return users;
+        }
+
+        private void SetTokens(string jwtToken, string refreshToken)
+        {
+            var cookieOptions = 
         }
     }
 }
