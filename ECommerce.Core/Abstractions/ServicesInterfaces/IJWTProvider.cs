@@ -10,5 +10,6 @@ namespace ECommerce.Core.Abstractions.ServicesInterfaces
     public interface IJwtProvider
     {
         string GenerateToken(User user);
+        string GenerateRefreshToken();
     }
 }
