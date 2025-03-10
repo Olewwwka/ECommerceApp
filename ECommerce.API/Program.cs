@@ -1,3 +1,5 @@
+using ECommerce.API.Endpoints;
+using ECommerce.Application.Mappers;
 using ECommerce.Application.Services;
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Abstractions.ServicesInterfaces;
@@ -16,7 +18,7 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions));
+services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
 services.AddDbContext<ECommerceDbContext>(options =>
 {
@@ -30,6 +32,7 @@ services.AddScoped<UserService>();
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -39,10 +42,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapUsersEndpoints();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
-app.MapControllers();
 
 app.Run();

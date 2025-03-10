@@ -1,5 +1,7 @@
 ﻿using ECommerce.Core.Abstractions.RepostoriesInterfaces;
+using ECommerce.Infrastructure.Caching;
 using ECommerce.Infrastructure.Persistence.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,12 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
     {
         private readonly ECommerceDbContext _context;
         public IUsersRepository UsersRepository { get; }
-        public UnitOfWork(ECommerceDbContext context)
+        public IRefreshTokenRepository RefreshTokenRepository { get; }
+        public UnitOfWork(ECommerceDbContext context, IConfiguration configuration)
         {
             _context = context;
             UsersRepository = new UsersRepository(context);
+            RefreshTokenRepository = new RefreshTokenRepository(configuration);
         }
 
         public async Task<int> SaveChangesAsync()

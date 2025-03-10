@@ -90,7 +90,7 @@ namespace ECommerce.Infrastructure.Persistence.Configuration
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("ECommerceDb"))
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("ECommerceDbContext"))
                 .UseLoggerFactory(CreateLoggerFactory())
                 .EnableSensitiveDataLogging();
         }
