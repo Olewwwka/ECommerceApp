@@ -3,6 +3,7 @@ using ECommerce.Application.Mappers;
 using ECommerce.Application.Services;
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Abstractions.ServicesInterfaces;
+using ECommerce.Infrastructure.Caching;
 using ECommerce.Infrastructure.Identity.Services;
 using ECommerce.Infrastructure.Persistence.Configuration;
 using ECommerce.Infrastructure.Persistence.Repositories;
@@ -20,6 +21,8 @@ services.AddSwaggerGen();
 
 services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
 
+services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();
+
 services.AddDbContext<ECommerceDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString(nameof(ECommerceDbContext)));
@@ -31,6 +34,8 @@ services.AddScoped<UserService>();
 
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+services.AddHttpContextAccessor();
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

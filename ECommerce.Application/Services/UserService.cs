@@ -3,11 +3,7 @@ using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Abstractions.ServicesInterfaces;
 using ECommerce.Core.Entities;
 using ECommerce.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ECommerce.Application.Services
 {
@@ -65,11 +61,6 @@ namespace ECommerce.Application.Services
             var users = _mapper.Map<List<User>>(userEntities);
 
             return users;
-        }
-
-        private void SetTokens(string jwtToken, string refreshToken)
-        {
-            var cookieOptions = 
         }
     }
 }

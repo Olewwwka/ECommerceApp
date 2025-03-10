@@ -1,5 +1,8 @@
 ﻿using ECommerce.API.Contracts.Requests;
 using ECommerce.Application.Services;
+using ECommerce.Core.Models;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 
 namespace ECommerce.API.Endpoints
 {
@@ -10,13 +13,13 @@ namespace ECommerce.API.Endpoints
             app.MapPost("register", Register);
             app.MapPost("login", Login);
             app.MapGet("getall", GetAllUsers);
-            app.MapPost("/refres-token", RefreshToken);
+            app.MapPost("/refresh-token", RefreshToken);
             return app;
         }
 
-        public async Task<IResult> RefreshToken(string refreshToken, )
+        public static async Task<IResult> RefreshToken(HttpContext context, string refreshToken)
         {
-                
+            return Results.Ok();
         }
 
 
@@ -28,11 +31,22 @@ namespace ECommerce.API.Endpoints
             return Results.Ok();
         }
 
-        public static async Task<IResult> Login(LoginUserRequest request, UserService userService)
+        public static async Task<IResult> Login(LoginUserRequest request, UserService userService, HttpContext context)
         {
-            var token = await userService.Login(request.Email, request.Password);
+            var (jwtToken, refreshToken) = await userService.Login(request.Email, request.Password);
 
-            return Results.Ok(token);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(3)
+            };
+            var Responce = context.Response;
+            Responce.Cookies.Append("jwtToken", jwtToken, cookieOptions);
+            Responce.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+
+            return Results.Ok(jwtToken);
         }
 
         public static async Task<IResult> GetAllUsers(UserService userService)
