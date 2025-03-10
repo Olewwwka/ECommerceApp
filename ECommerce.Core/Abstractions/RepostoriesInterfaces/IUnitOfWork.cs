@@ -9,6 +9,7 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
     public interface IUnitOfWork
     {
         IUsersRepository UsersRepository { get; }
+        IRefreshTokenRepository RefreshTokenRepository { get; }
         void Dispose();
         Task<int> SaveChangesAsync();
     }
