@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Core.Entities
 {
-    /*public class ShoppingCartEntity
+    public class ShoppingCartEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CartId { get; set; }
         public int UserId { get; set; }
         public UserEntity User { get; set; }
-        public List<ProductEntity> Products { get; set; } = [];
-    }*/
+        public ICollection<ShoppingCartProductEntity> Products { get; set; } = [];
+    }
 }

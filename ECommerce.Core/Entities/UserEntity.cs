@@ -14,5 +14,6 @@ namespace ECommerce.Core.Entities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public ICollection<RoleEntity> Roles { get; set; } = [];
+        public ShoppingCartEntity ShoppingCart { get; set; }
     }
 }

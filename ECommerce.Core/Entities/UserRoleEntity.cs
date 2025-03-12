@@ -8,7 +8,7 @@ namespace ECommerce.Core.Entities
 {
     public class UserRoleEntity
     {
-        public int UserdId { get; set; }
+        public int UserId { get; set; }
         public int RoleId { get; set; }
     }
 }
