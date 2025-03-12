@@ -12,5 +12,6 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
         Task<List<UserEntity>> GetAllAsync();
         Task AddAsync(UserEntity user);
         Task<UserEntity> GetByEmailAsync(string email);
+        Task<UserEntity> GetByIdAsync(int id);
     }
 }

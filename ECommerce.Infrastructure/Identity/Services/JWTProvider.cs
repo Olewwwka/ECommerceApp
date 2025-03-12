@@ -26,7 +26,7 @@ namespace ECommerce.Infrastructure.Identity.Services
             var token = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: signingCredentials,
-                expires: DateTime.UtcNow.AddHours(_options.ExpiresHours));
+                expires: DateTime.UtcNow.AddSeconds(_options.ExpiresHours));
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 

@@ -1,8 +1,12 @@
 ﻿using ECommerce.Core.Abstractions.RepostoriesInterfaces;
+using ECommerce.Core.Entities;
+using ECommerce.Core.Models;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,18 +33,36 @@ namespace ECommerce.Infrastructure.Caching
 
         public async Task SetRefreshTokenAsync(int userId, string refreshToken, TimeSpan expires)
         {
-            await _cache.StringSetAsync($"refreshToken:{userId}", refreshToken, expires);
+            var oldToken = await _cache.StringGetAsync($"user:{userId}");
+
+            if (!oldToken.IsNullOrEmpty)
+            {
+                await _cache.KeyDeleteAsync($"refreshToken:{oldToken}");
+            }
+
+            await _cache.StringSetAsync($"refreshToken:{refreshToken}", userId.ToString(), expires);
+
+            await _cache.StringSetAsync($"user:{userId}", refreshToken, expires);
         }
 
-        public async Task<string?> GetRefreshTokenAsync(string userId)
+        public async Task<string?> GetRefreshTokenAsync(int userId)
         {
-            var token = await _cache.StringGetAsync($"refreshToken:{userId}");
+            var token = await _cache.StringGetAsync($"user:{userId}");
             return token.HasValue ? token.ToString() : null;
         }
-
-        public async Task RemoveRefreshTokenAsync(string userId)
+        public async Task RemoveRefreshTokenAsync(int userId)
         {
-            await _cache.KeyDeleteAsync($"refreshToken:{userId}");
+            var token = await _cache.StringGetAsync($"user:{userId}");
+            if (!token.IsNullOrEmpty)
+            {
+                await _cache.KeyDeleteAsync($"refreshToken:{token}");
+            }
+            await _cache.KeyDeleteAsync($"user:{userId}");
+        }
+        public async Task<int?> GetUserIdByRefreshToken(string refreshToken)
+        {
+            var stringUserId = await _cache.StringGetAsync($"refreshToken:{refreshToken}");
+            return int.TryParse(stringUserId, out var userId) ? userId : null;
         }
     }
 }

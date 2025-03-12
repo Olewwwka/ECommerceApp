@@ -15,13 +15,6 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
 
         public async Task AddAsync(UserEntity user)
         {
-           /* var shoppingCart = new ShoppingCartEntity
-            {
-                User = user,
-                Products = new List<ProductEntity>()
-            };
-
-            await _context.ShoppingCarts.AddAsync(shoppingCart);*/
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
@@ -35,6 +28,14 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
             var userEntity = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Email == email);
+            return userEntity;
+        }
+
+        public async Task<UserEntity> GetByIdAsync(int id)
+        {
+            var userEntity = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == id);
             return userEntity;
         }
 

@@ -49,7 +49,7 @@ namespace ECommerce.Application.Services
             }
             var token = _jwtProvider.GenerateToken(user);
             var refreshToken = _jwtProvider.GenerateRefreshToken();
-            await _unitOfWork.RefreshTokenRepository.SetRefreshTokenAsync(userEntity.UserId, refreshToken, TimeSpan.FromHours(2));
+            await _unitOfWork.RefreshTokenRepository.SetRefreshTokenAsync(userEntity.UserId, refreshToken, TimeSpan.FromDays(2));
 
             return (token, refreshToken);
         }
@@ -61,6 +61,29 @@ namespace ECommerce.Application.Services
             var users = _mapper.Map<List<User>>(userEntities);
 
             return users;
+        }
+
+        public async Task<(string? newAccessToken, string? newRefreshToken)> ValidateAndRefreshToken(string refreshToken)
+        {
+            var userId = await _unitOfWork.RefreshTokenRepository.GetUserIdByRefreshToken(refreshToken);
+
+
+            if (userId is -1)
+            {
+                return (null, null);
+            }
+
+            var userEntity = await _unitOfWork.UsersRepository.GetByIdAsync((int)userId);
+
+            var user = _mapper.Map<User>(userEntity);
+
+            var newAccessToken = _jwtProvider.GenerateToken(user);
+            var newRefreshToken = _jwtProvider.GenerateRefreshToken();
+
+            await _unitOfWork.RefreshTokenRepository.RemoveRefreshTokenAsync((int)userId);
+            await _unitOfWork.RefreshTokenRepository.SetRefreshTokenAsync((int)userId, newRefreshToken, TimeSpan.FromDays(2));
+
+            return (newAccessToken, newRefreshToken);
         }
     }
 }

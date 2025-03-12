@@ -12,14 +12,39 @@ namespace ECommerce.API.Endpoints
         {
             app.MapPost("register", Register);
             app.MapPost("login", Login);
-            app.MapGet("getall", GetAllUsers);
+            app.MapGet("getall", GetAllUsers).RequireAuthorization();
             app.MapPost("/refresh-token", RefreshToken);
             return app;
         }
 
-        public static async Task<IResult> RefreshToken(HttpContext context, string refreshToken)
+        public static async Task<IResult> RefreshToken(HttpContext context, UserService userService)
         {
-            return Results.Ok();
+            var refreshToken = context.Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Results.Unauthorized();
+            }
+
+            var (newAccessToken, newRefreshToken) = await userService.ValidateAndRefreshToken(refreshToken);
+
+            if (newAccessToken == null)
+            {
+                return Results.Unauthorized();
+            }
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(2)
+            };
+
+            context.Response.Cookies.Append("jwtToken", newAccessToken, cookieOptions);
+            context.Response.Cookies.Append("refreshToken", newRefreshToken, cookieOptions);
+
+            return Results.Ok(new { Token = newAccessToken });
         }
 
 

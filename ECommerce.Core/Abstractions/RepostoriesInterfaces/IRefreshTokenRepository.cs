@@ -8,9 +8,9 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
 {
     public interface IRefreshTokenRepository
     {
+        Task<string?> GetRefreshTokenAsync(int userId);
+        Task<int?> GetUserIdByRefreshToken(string refreshToken);
+        Task RemoveRefreshTokenAsync(int userId);
         Task SetRefreshTokenAsync(int userId, string refreshToken, TimeSpan expires);
-        Task<string?> GetRefreshTokenAsync(string userId);
-        Task RemoveRefreshTokenAsync(string userId);
-
     }
 }
