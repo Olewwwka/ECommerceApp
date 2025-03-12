@@ -12,7 +12,7 @@ namespace ECommerce.API.Endpoints
         {
             app.MapPost("register", Register);
             app.MapPost("login", Login);
-            app.MapGet("getall", GetAllUsers).RequireAuthorization();
+            app.MapGet("getall", GetAllUsers).RequireAuthorization().RequireAuthorization();
             app.MapPost("/refresh-token", RefreshToken);
             return app;
         }

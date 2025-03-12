@@ -1,4 +1,5 @@
 using ECommerce.API.Endpoints;
+using ECommerce.API.Extensions;
 using ECommerce.Application.Mappers;
 using ECommerce.Application.Services;
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
@@ -8,6 +9,7 @@ using ECommerce.Infrastructure.Identity.Services;
 using ECommerce.Infrastructure.Persistence.Configuration;
 using ECommerce.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,15 +29,16 @@ services.AddDbContext<ECommerceDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString(nameof(ECommerceDbContext)));
 });
+services.AddApiAutorization(configuration,
+    builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>());
+
+services.AddHttpContextAccessor();
 
 services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 services.AddScoped<UserService>();
 
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
-
-services.AddHttpContextAccessor();
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -47,8 +50,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.AddMappedEndpoints();
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
