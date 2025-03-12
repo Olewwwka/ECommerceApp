@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Core.Abstractions.ServicesInterfaces
+namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
 {
     public interface IPasswordHasher
     {

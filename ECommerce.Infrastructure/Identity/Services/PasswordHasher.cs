@@ -1,4 +1,4 @@
-﻿using ECommerce.Core.Abstractions.ServicesInterfaces;
+﻿using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 
 namespace ECommerce.Infrastructure.Identity.Services
 {

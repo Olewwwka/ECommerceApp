@@ -18,7 +18,7 @@ namespace ECommerce.Infrastructure.Identity.Services
         }
         public string GenerateToken(User user)
         {
-            Claim[] claims = [new("userId", user.Login.ToString()), new("Admin", "true")];
+            Claim[] claims = [new("userId", user.Login.ToString())];
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
