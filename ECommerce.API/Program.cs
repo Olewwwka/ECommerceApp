@@ -22,15 +22,21 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+services.Configure<AuthorizationOptions>(configuration.GetSection(nameof(AuthorizationOptions)));
 
 services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();
 
-services.AddDbContext<ECommerceDbContext>(options =>
+services.AddDbContext<ECommerceDbContext>((serviceProvider, options) =>
 {
-    options.UseNpgsql(configuration.GetConnectionString(nameof(ECommerceDbContext)));
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    var authOptions = serviceProvider.GetRequiredService<IOptions<AuthorizationOptions>>();
+
+    options.UseNpgsql(config.GetConnectionString(nameof(ECommerceDbContext)));
+
+    options.UseApplicationServiceProvider(serviceProvider);
 });
-services.AddApiAutorization(configuration,
-    builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>());
+
+services.AddApiAutorization(configuration);
 
 services.AddHttpContextAccessor();
 
@@ -51,9 +57,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.AddMappedEndpoints();
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.MapGet("get", () =>
+{
+    return Results.Ok("ok");
+}).RequireAuthorization("AdminPolicy");
 
 
 app.Run();

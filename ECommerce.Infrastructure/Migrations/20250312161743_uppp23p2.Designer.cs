@@ -2,6 +2,7 @@
 using ECommerce.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    partial class ECommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250312161743_uppp23p2")]
+    partial class uppp23p2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,33 +158,6 @@ namespace ECommerce.Infrastructure.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("RolePermission", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = 1,
-                            PermissionId = 2
-                        },
-                        new
-                        {
-                            RoleId = 1,
-                            PermissionId = 1
-                        },
-                        new
-                        {
-                            RoleId = 1,
-                            PermissionId = 3
-                        },
-                        new
-                        {
-                            RoleId = 1,
-                            PermissionId = 4
-                        },
-                        new
-                        {
-                            RoleId = 2,
-                            PermissionId = 1
-                        });
                 });
 
             modelBuilder.Entity("ECommerce.Core.Entities.ShoppingCartEntity", b =>

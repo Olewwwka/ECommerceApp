@@ -15,33 +15,48 @@ namespace ECommerce.API.Extensions
         }
 
         public static void AddApiAutorization(this IServiceCollection services,
-            IConfiguration configuration, IOptions<JwtOptions> jwtOptions)
+            IConfiguration configuration)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+
+                options.TokenValidationParameters = new()
                 {
-                    options.TokenValidationParameters = new()
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey
-                            (Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey))
-                    };
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes(jwtOptions!.SecretKey))
+                };
 
-                    options.Events = new JwtBearerEvents
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
                     {
-                        OnMessageReceived = context =>
-                        {
-                            context.Token = context.Request.Cookies["jwtToken"];
+                        context.Token = context.Request.Cookies["jwtToken"];
 
-                            return Task.CompletedTask;
-                        }
-                    };
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy =>
+                {
+                    policy.RequireClaim("Admin", "true");
                 });
-
-            services.AddAuthorization();
+            });
         }
     }
 }
