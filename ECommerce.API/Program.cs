@@ -36,6 +36,8 @@ services.AddHttpContextAccessor();
 
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 services.AddScoped<UserService>();
+services.AddScoped<CategoryService>();
+services.AddScoped<ProductsService>();
 
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
