@@ -1,6 +1,10 @@
-﻿using ECommerce.API.Endpoints;
+﻿using Core.Abstractions.ServicesInterfaces;
+using ECommerce.API.Endpoints;
+using ECommerce.Application.Services;
+using ECommerce.Core.Enums;
 using ECommerce.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -41,7 +45,18 @@ namespace ECommerce.API.Extensions
                     };
                 });
 
+            services.AddScoped<IPermissionService, PermissionService>();
+            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
             services.AddAuthorization();
+        }
+
+        public static IEndpointConventionBuilder RequirePermissions<TBuilder>(
+            this TBuilder builder, params Permission[] permissions)
+            where TBuilder : IEndpointConventionBuilder
+        {
+            return builder.RequireAuthorization(policy =>
+                policy.AddRequirements(new PermissionsRequirment(permissions)));
         }
     }
 }
