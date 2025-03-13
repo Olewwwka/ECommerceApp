@@ -11,5 +11,9 @@ namespace ECommerce.Core.Entities
         public int UserId { get; set; }
         public UserEntity User { get; set; }
         public ICollection<ShoppingCartProductEntity> Products { get; set; } = [];
+        public ShoppingCartEntity(int userId)
+        {
+            UserId = userId;
+        }
     }
 }
