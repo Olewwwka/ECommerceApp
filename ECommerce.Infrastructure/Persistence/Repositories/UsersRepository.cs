@@ -20,21 +20,24 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
         {
             var roleEntity = await _context.Roles
                 .SingleOrDefaultAsync(r => r.RoleId == (int)Role.Admin)
-                ?? throw new InvalidOperationException();
+                ?? throw new InvalidOperationException("Role not found.");
 
             var userEntity = new UserEntity()
             {
-                UserId = user.UserId,
                 Email = user.Email,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 Login = user.Login,
                 PasswordHash = user.PasswordHash,
-                Roles = [roleEntity],
-                ShoppingCart = new ShoppingCartEntity()
+                Roles = [roleEntity], 
+                ShoppingCart = new ShoppingCartEntity(user.UserId)  
             };
-
+            
             await _context.Users.AddAsync(userEntity);
+            await _context.SaveChangesAsync();  
+            
+            userEntity.ShoppingCart.UserId = userEntity.UserId;
+            await _context.SaveChangesAsync(); 
         }
         public async Task<List<UserEntity>> GetAllAsync()
         {

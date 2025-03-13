@@ -15,11 +15,18 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
         private readonly ECommerceDbContext _context;
         public IUsersRepository UsersRepository { get; }
         public IRefreshTokenRepository RefreshTokenRepository { get; }
+        public IProductsRepository ProductsRepository { get; }
+        public ICategoriesRepository CategoriesRepository { get; }
+        public IShoppingCartsRepository ShoppingCartsRepository { get; }
+
         public UnitOfWork(ECommerceDbContext context, IConfiguration configuration)
         {
             _context = context;
             UsersRepository = new UsersRepository(context);
             RefreshTokenRepository = new RefreshTokenRepository(configuration);
+            ProductsRepository = new ProductsRepository(context);
+            CategoriesRepository = new CategoriesRepository(context);
+            ShoppingCartsRepository = new ShoppingCartsRepository(context);
         }
 
         public async Task<int> SaveChangesAsync()
