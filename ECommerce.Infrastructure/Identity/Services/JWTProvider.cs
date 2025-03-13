@@ -1,4 +1,5 @@
 ﻿using ECommerce.Core.Abstractions.ServicesInterfaces;
+using ECommerce.Core.Entities;
 using ECommerce.Core.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,9 +17,9 @@ namespace ECommerce.Infrastructure.Identity.Services
         {
             _options = options.Value;
         }
-        public string GenerateToken(User user)
+        public string GenerateToken(UserEntity user)
         {
-            Claim[] claims = [new("userId", user.Login.ToString())];
+            Claim[] claims = [ new(CustomClaims.UserId, user.UserId.ToString())];
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
