@@ -1,4 +1,5 @@
 ﻿using ECommerce.Core.Entities;
+using ECommerce.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
         Task AddAsync(UserEntity user);
         Task<UserEntity> GetByEmailAsync(string email);
         Task<UserEntity> GetByIdAsync(int id);
+        Task<HashSet<Permission>> GetUserPermissionsAsync(int userId);
     }
 }
