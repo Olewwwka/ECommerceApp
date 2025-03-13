@@ -1,4 +1,5 @@
-﻿using ECommerce.Core.Models;
+﻿using ECommerce.Core.Entities;
+using ECommerce.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace ECommerce.Core.Abstractions.ServicesInterfaces
 {
     public interface IJwtProvider
     {
-        string GenerateToken(User user);
+        string GenerateToken(UserEntity user);
         string GenerateRefreshToken();
     }
 }

@@ -40,14 +40,13 @@ namespace ECommerce.Application.Services
         {
             var userEntity = await _unitOfWork.UsersRepository.GetByEmailAsync(email);
 
-            var user = _mapper.Map<User>(userEntity);
-            var result = _passwordHasher.Verify(password, user.PasswordHash);
+            var result = _passwordHasher.Verify(password, userEntity.PasswordHash);
 
             if (result == false)
             {
                 throw new Exception("wrongpassword");
             }
-            var token = _jwtProvider.GenerateToken(user);
+            var token = _jwtProvider.GenerateToken(userEntity);
             var refreshToken = _jwtProvider.GenerateRefreshToken();
             await _unitOfWork.RefreshTokenRepository.SetRefreshTokenAsync(userEntity.UserId, refreshToken, TimeSpan.FromDays(2));
 
@@ -73,9 +72,7 @@ namespace ECommerce.Application.Services
                 return (null, null);
             }
 
-            var userEntity = await _unitOfWork.UsersRepository.GetByIdAsync((int)userId);
-
-            var user = _mapper.Map<User>(userEntity);
+            var user = await _unitOfWork.UsersRepository.GetByIdAsync((int)userId);
 
             var newAccessToken = _jwtProvider.GenerateToken(user);
             var newRefreshToken = _jwtProvider.GenerateRefreshToken();

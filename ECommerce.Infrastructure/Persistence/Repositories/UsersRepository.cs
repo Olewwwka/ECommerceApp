@@ -1,7 +1,10 @@
 ﻿using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Entities;
+using ECommerce.Core.Enums;
 using ECommerce.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ECommerce.Infrastructure.Persistence.Repositories
 {
@@ -15,8 +18,23 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
 
         public async Task AddAsync(UserEntity user)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            var roleEntity = await _context.Roles
+                .SingleOrDefaultAsync(r => r.RoleId == (int)Role.Admin)
+                ?? throw new InvalidOperationException();
+
+            var userEntity = new UserEntity()
+            {
+                UserId = user.UserId,
+                Email = user.Email,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                Login = user.Login,
+                PasswordHash = user.PasswordHash,
+                Roles = [roleEntity],
+                ShoppingCart = new ShoppingCartEntity()
+            };
+
+            await _context.Users.AddAsync(userEntity);
         }
         public async Task<List<UserEntity>> GetAllAsync()
         {
@@ -37,6 +55,23 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == id);
             return userEntity;
+        }
+
+        public async Task<HashSet<Permission>> GetUserPermissionsAsync(int userId)
+        {
+            var roles = await _context.Users
+                .AsNoTracking()
+                .Include(u => u.Roles)
+                .ThenInclude(p => p.Permisions)
+                .Where(u => u.UserId == userId)
+                .Select(u => u.Roles)
+                .ToArrayAsync();
+
+            return roles
+                .SelectMany(r => r)
+                .SelectMany(r => r.Permisions)
+                .Select(p => (Permission)p.Id)
+                .ToHashSet();
         }
 
     }

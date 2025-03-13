@@ -1,9 +1,8 @@
-using ECommerce.API.Endpoints;
 using ECommerce.API.Extensions;
-using ECommerce.Application.Mappers;
 using ECommerce.Application.Services;
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Abstractions.ServicesInterfaces;
+using ECommerce.Core.Enums;
 using ECommerce.Infrastructure.Caching;
 using ECommerce.Infrastructure.Identity.Services;
 using ECommerce.Infrastructure.Persistence.Configuration;
@@ -22,6 +21,7 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+services.Configure<AuthorizationOptions>(configuration.GetSection(nameof(AuthorizationOptions)));
 
 services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();
 
@@ -56,4 +56,26 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+app.MapGet("get", () =>
+{
+    return Results.Ok("ok");
+}).RequirePermissions(Permission.Read);
+
+app.MapPost("MapPost", () =>
+{
+    return Results.Ok("ok");
+}).RequirePermissions(Permission.Create);
+
+app.MapPut("MapPut", () =>
+{
+    return Results.Ok("ok");
+}).RequirePermissions(Permission.Update);
+
+app.MapDelete("MapDelete", () =>
+{
+    return Results.Ok("ok");
+}).RequirePermissions(Permission.Delete);
+
+
 app.Run();
+    

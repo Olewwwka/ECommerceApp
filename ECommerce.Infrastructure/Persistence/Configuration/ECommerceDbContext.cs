@@ -21,8 +21,6 @@ namespace ECommerce.Infrastructure.Persistence.Configuration
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ECommerceDbContext).Assembly);
 
             modelBuilder.ApplyConfiguration(new RolePermissionConfiguration(authOptions.Value));
-
-            Console.WriteLine($"Loaded RolePermissions: {authOptions.Value}");
         }
     }
 }
