@@ -10,6 +10,9 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
     {
         IUsersRepository UsersRepository { get; }
         IRefreshTokenRepository RefreshTokenRepository { get; }
+        IProductsRepository ProductsRepository { get; }
+        ICategoriesRepository CategoriesRepository { get; }
+        IShoppingCartsRepository ShoppingCartsRepository { get; }
         void Dispose();
         Task<int> SaveChangesAsync();
     }
