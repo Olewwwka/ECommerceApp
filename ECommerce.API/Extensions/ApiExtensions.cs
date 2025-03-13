@@ -16,6 +16,8 @@ namespace ECommerce.API.Extensions
         public static void AddMappedEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapUsersEndpoints();
+            app.MapCategoriesEndpoints();
+            app.MapProductsEndpoints();
         }
 
         public static void AddApiAutorization(this IServiceCollection services,
