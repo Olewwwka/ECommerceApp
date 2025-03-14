@@ -81,21 +81,21 @@ namespace ECommerce.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<Product>> GetProductsByCategory(string categoryName)
+        public async Task<List<Product>> GetProductsByCategory(string categoryName, int pageNumber, int pageSize)
         {
             var categoryEntity = await _unitOfWork.CategoriesRepository.GetByNameAsync(categoryName);
-            var categotyId = categoryEntity.CategoryId;
+            if (categoryEntity == null) throw new ArgumentException("Такой категории не существует");
 
-            var productsEntities = await _unitOfWork.ProductsRepository.GetAllByCategoryAsync(categotyId);
+            var categoryId = categoryEntity.CategoryId;
+            var productsEntities = await _unitOfWork.ProductsRepository.GetAllByCategoryAsync(categoryId, pageNumber, pageSize);
             var products = _mapper.Map<List<Product>>(productsEntities);
 
             return products;
         }
 
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts(int pageNumber, int pageSize)
         {
-            var productEntities = await _unitOfWork.ProductsRepository.GetAllAsync();
-
+            var productEntities = await _unitOfWork.ProductsRepository.GetAllAsync(pageNumber, pageSize);
             var products = _mapper.Map<List<Product>>(productEntities);
 
             return products;

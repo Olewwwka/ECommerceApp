@@ -19,13 +19,22 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<List<ProductEntity>> GetAllAsync()
+        public async Task<List<ProductEntity>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _context.Products.AsNoTracking().ToListAsync();
+            return await _context.Products
+                .AsNoTracking()
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
-        public async Task<List<ProductEntity>> GetAllByCategoryAsync(int categoryId)
+        public async Task<List<ProductEntity>> GetAllByCategoryAsync(int categoryId, int pageNumber, int pageSize)
         {
-            return await _context.Products.Where(x => x.CategoryId == categoryId).AsNoTracking().ToListAsync();
+            return await _context.Products
+                .Where(x => x.CategoryId == categoryId)
+                .AsNoTracking()
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<ProductEntity> GetByIdAsync(int id)
