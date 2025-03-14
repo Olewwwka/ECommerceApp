@@ -1,4 +1,4 @@
-﻿using ECommerce.API.Contracts.Requests;
+﻿using ECommerce.Application.Contracts.Requests;
 using ECommerce.Application.Services;
 using ECommerce.Core.Models;
 using Microsoft.AspNetCore.Http;

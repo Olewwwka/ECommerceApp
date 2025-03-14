@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.API.Contracts.Requests
+namespace ECommerce.Application.Contracts.Requests
 {
     public record RegisterUserRequest
     (
