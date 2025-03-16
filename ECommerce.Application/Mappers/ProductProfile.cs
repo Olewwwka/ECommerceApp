@@ -20,6 +20,14 @@ namespace ECommerce.Application.Mappers
 
             CreateMap<ProductEntity, Product>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.CategoryId));
+
+            CreateMap<ShoppingCartProductEntity, Product>()
+               .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
+               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product.Name))
+               .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Product.Description))
+               .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product.Price))
+               .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Product.CategoryId))
+               .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
         }
     }
 }
