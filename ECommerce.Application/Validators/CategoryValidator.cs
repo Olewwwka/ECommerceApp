@@ -12,7 +12,7 @@ namespace ECommerce.Application.Validators
               .Length(3, 50).WithMessage("Название должно содержать 3-50 символов");
 
             RuleFor(x => x.Description)
-                .Length(5, 100).WithMessage("Описание должно содержать 5-100 символов");s
+                .Length(5, 100).WithMessage("Описание должно содержать 5-100 символов");
         }
     }
 }

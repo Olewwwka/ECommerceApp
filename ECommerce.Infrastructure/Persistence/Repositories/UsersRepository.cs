@@ -43,7 +43,11 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
         {
             return await _context.Users.AsNoTracking().ToListAsync();
         }
-
+        public async Task<bool> UserExistsAsync(string email, string login)
+        {
+            return await _context.Users
+                .AnyAsync(user => user.Email == email || user.Login == login);
+        }
         public async Task<UserEntity> GetByEmailAsync(string email)
         {
             var userEntity = await _context.Users

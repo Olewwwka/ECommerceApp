@@ -18,7 +18,23 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
+        public async Task ChangeCountOfProductAsync(int productId, int quantity)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
 
+            if (product == null)
+            {
+                throw new KeyNotFoundException($"Product with ID {productId} not found.");
+            }
+
+            if (product.StockQuantity + quantity < 0)
+            {
+                throw new InvalidOperationException("Not enough stock available.");
+            }
+
+            product.StockQuantity -= quantity;
+            await _context.SaveChangesAsync();
+        }
         public async Task<List<ProductEntity>> GetAllAsync(int pageNumber, int pageSize)
         {
             return await _context.Products

@@ -15,14 +15,18 @@ namespace ECommerce.Core.Models
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; } = 0;
-        public int StockQuantity { get; set; } = 0;
+        public int Quantity { get; set; } = 0;
+        public Product()
+        {
+            
+        }
         public Product(int categoryId, string name, string description, decimal price, int stockQuantity)
         {
             CategoryId = categoryId;
             Name = name;
             Description = description;
             Price = price;
-            StockQuantity = stockQuantity;
+            Quantity = stockQuantity;
         }
     }
 }

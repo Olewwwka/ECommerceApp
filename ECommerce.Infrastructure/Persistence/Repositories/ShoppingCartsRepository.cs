@@ -62,7 +62,7 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
             var item = shoppingCart.Products.FirstOrDefault(i => i.ProductId == productId);
             if (item != null)
             {
-                item.Quantity = quantity;
+                item.Quantity += quantity;
                 await _context.SaveChangesAsync();
             }
             else
