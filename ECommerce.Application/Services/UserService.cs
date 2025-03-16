@@ -2,6 +2,7 @@
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Abstractions.ServicesInterfaces;
 using ECommerce.Core.Entities;
+using ECommerce.Core.Enums;
 using ECommerce.Core.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -25,6 +26,11 @@ namespace ECommerce.Application.Services
         }
         public async Task Register(string login, string email, string password, string firstname, string lastname)
         {
+            if (await _unitOfWork.UsersRepository.UserExistsAsync(email, login))
+            {
+                throw new InvalidOperationException("User with this login or email already exists");
+            }
+
             var hashedPassword = _passwordHasher.Generate(password);
 
             var user = User.Create(login, hashedPassword, email, firstname, lastname);
@@ -81,6 +87,11 @@ namespace ECommerce.Application.Services
             await _unitOfWork.RefreshTokenRepository.SetRefreshTokenAsync((int)userId, newRefreshToken, TimeSpan.FromDays(2));
 
             return (newAccessToken, newRefreshToken);
+        }
+
+        public Task<HashSet<Permission>> GetPermissionsAsync(int id)
+        {
+            return _unitOfWork.UsersRepository.GetUserPermissionsAsync(id);
         }
     }
 }

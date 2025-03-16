@@ -1,7 +1,11 @@
-
-using Core.Abstractions.ServicesInterfaces;
+﻿using Core.Abstractions.ServicesInterfaces;
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ECommerce.Application.Services
 {
@@ -12,7 +16,6 @@ namespace ECommerce.Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-
         public Task<HashSet<Permission>> GetPermissionsAsync(int id)
         {
             return _unitOfWork.UsersRepository.GetUserPermissionsAsync(id);
