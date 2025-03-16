@@ -2,7 +2,6 @@ using ECommerce.API.Extensions;
 using ECommerce.Application.Services;
 using ECommerce.Core.Abstractions.RepostoriesInterfaces;
 using ECommerce.Core.Abstractions.ServicesInterfaces;
-using ECommerce.Core.Enums;
 using ECommerce.Infrastructure.Caching;
 using ECommerce.Infrastructure.Identity.Services;
 using ECommerce.Infrastructure.Persistence.Configuration;
@@ -38,7 +37,9 @@ services.AddScoped<IUnitOfWork, UnitOfWork>();
 services.AddScoped<UserService>();
 services.AddScoped<CategoryService>();
 services.AddScoped<ProductsService>();
+services.AddScoped<UserCartService>();
 
+services.AddScoped<ICurrentUserService, CurrentUserService>();
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
 
@@ -57,26 +58,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-app.MapGet("get", () =>
-{
-    return Results.Ok("ok");
-}).RequirePermissions(Permission.Read);
-
-app.MapPost("MapPost", () =>
-{
-    return Results.Ok("ok");
-}).RequirePermissions(Permission.Create);
-
-app.MapPut("MapPut", () =>
-{
-    return Results.Ok("ok");
-}).RequirePermissions(Permission.Update);
-
-app.MapDelete("MapDelete", () =>
-{
-    return Results.Ok("ok");
-}).RequirePermissions(Permission.Delete);
 
 
 app.Run();
