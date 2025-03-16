@@ -11,6 +11,5 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
         Task<ProductEntity> GetByIdAsync(int id);
         Task<int> UpdateInfoAsync(int id, string name, string description, decimal price);
         Task<int> UpdateQuantityAsync(int id, int stockQuantity);
-        Task ChangeCountOfProductAsync(int productId, int quantity);
     }
 }

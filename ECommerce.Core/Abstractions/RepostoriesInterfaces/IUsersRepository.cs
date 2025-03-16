@@ -15,6 +15,5 @@ namespace ECommerce.Core.Abstractions.RepostoriesInterfaces
         Task<UserEntity> GetByEmailAsync(string email);
         Task<UserEntity> GetByIdAsync(int id);
         Task<HashSet<Permission>> GetUserPermissionsAsync(int userId);
-        Task<bool> UserExistsAsync(string email, string login);
     }
 }
