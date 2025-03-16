@@ -17,7 +17,6 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
-
         public async Task AddItemToCartAsync(int userId, int productId, int quantity)
         {
             var shoppingCart = await _context.ShoppingCarts
@@ -31,10 +30,10 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
             }
 
             var existingItem = shoppingCart.Products.FirstOrDefault(item => item.ProductId == productId);
-
             if (existingItem != null)
             {
                 existingItem.Quantity += quantity;
+
             }
             else
             {
@@ -72,7 +71,7 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task RemoveItemFromCartAsync(int userId, int productId)
+        public async Task<int> RemoveItemFromCartAsync(int userId, int productId)
         {
             var shoppingCart = await _context.ShoppingCarts
                 .Include(cart => cart.Products)
@@ -93,6 +92,7 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
             {
                 throw new Exception("Item not found in cart.");
             }
+            return item.Quantity;
         }
 
         public async Task ClearCartAsync(int userId)
@@ -114,6 +114,7 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
         {
             var shoppingCart = await _context.ShoppingCarts
                 .Include(cart => cart.Products)
+                .ThenInclude(cartProduct => cartProduct.Product)
                 .FirstOrDefaultAsync(cart => cart.UserId == userId);
 
             if (shoppingCart == null)
@@ -123,7 +124,5 @@ namespace ECommerce.Infrastructure.Persistence.Repositories
 
             return shoppingCart.Products.ToList();
         }
-
-
     }
 }

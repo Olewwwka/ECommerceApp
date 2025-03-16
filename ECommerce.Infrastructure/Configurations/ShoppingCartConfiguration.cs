@@ -15,10 +15,10 @@ namespace ECommerce.Infrastructure.Configurations
         {
             builder.ToTable("ShoppingCarts").HasKey(x => x.CartId);
 
-            builder.HasOne(x => x.User)
+            builder.HasMany(x => x.Products)
                 .WithOne(x => x.ShoppingCart)
-                .HasForeignKey<ShoppingCartEntity>(x => x.UserId);
-
+                .HasForeignKey(x => x.ShoppingCartId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -16,12 +16,14 @@ namespace ECommerce.Infrastructure.Configurations
             builder.HasKey(x => new { x.ShoppingCartId, x.ProductId });
 
             builder.HasOne(x => x.ShoppingCart)
-                .WithMany()
-                .HasForeignKey(x => x.ShoppingCartId);
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.ShoppingCartId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Product)
                 .WithMany()
-                .HasForeignKey(x => x.ProductId);
+                .HasForeignKey(x => x.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

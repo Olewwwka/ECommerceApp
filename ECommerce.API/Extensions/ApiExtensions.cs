@@ -18,6 +18,7 @@ namespace ECommerce.API.Extensions
             app.MapUsersEndpoints();
             app.MapCategoriesEndpoints();
             app.MapProductsEndpoints();
+            app.MapCartEndpoints();
         }
 
         public static void AddApiAutorization(this IServiceCollection services,
